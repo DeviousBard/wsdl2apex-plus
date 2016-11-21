@@ -3,10 +3,10 @@
 public class ${schema.name} {
 
     #foreach ($type in $schema.types)public class ${type.name} {
-        #foreach ($element in $type.elements)public ${schema.getApexType($type, $element, true)} ${element.name};
+        #foreach ($element in $type.elements)public ${schema.getApexType($type, $element, true)} ${element.name}#if($element.multiOccurring)[]#end;
         #end
 
-        #foreach ($element in $type.elements)private String[] ${element.name}_type_info = new String[] {'${element.name}','${element.namespace}','${schema.getApexType($type, $element, false)}','1','-1','true'};
+        #foreach ($element in $type.elements)private String[] ${element.name}_type_info = new String[] {'${element.name}','${element.elementNamespace}','${schema.getApexType($type, $element, false)}','${element.minOccurs}','${element.maxOccurs}','${element.required}'};
         #end
 
         private String[] apex_schema_type_info = new String[] {'${type.namespace}','true','false'};
@@ -16,33 +16,9 @@ public class ${schema.name} {
         }
 
         public ${type.name}(DOM.XmlNode responseNode) {
-            Set<DOM.XmlNode> nodesParsed = new Set<DOM.XmlNode>();
-            Dom.XmlNode[] ageBandRateCountChildren = responseNode.getChildElements();
-            RatingSystemV10_HTTP_XSD.AgeBandRateCountType[] ageBandRateCountList = new List<RatingSystemV10_HTTP_XSD.AgeBandRateCountType>();
-            if (ageBandRateCountChildren == null || ageBandRateCountChildren.size() == 0) {
-                this.ageBandRateCount = null;
-            } else {
-                for (DOM.XmlNode childNode : ageBandRateCountChildren) {
-                    if (childNode.GetName() == 'ageBandRateCount') {
-                        RatingSystemV10_HTTP_XSD.AgeBandRateCountType Obj = new RatingSystemV10_HTTP_XSD.AgeBandRateCountType(childNode);
-                        ageBandRateCountList.Add(Obj);
-                        nodesParsed.add(childNode);
-                    }
-                }
-                this.ageBandRateCount = ageBandRateCountList;
-            }
-            //System.debug(this.ageBandRateCount);
         }
 
         public void populateXmlNode(Dom.XmlNode outerNode) {
-            RatingSystemV10_HTTP_XSD.AgeBandRateCountType[] ageBandRateCountObj = this.ageBandRateCount;
-            if (ageBandRateCountObj != null) {
-                for (RatingSystemV10_HTTP_XSD.AgeBandRateCountType element: ageBandRateCountObj) {
-                    Dom.XmlNode ageBandRateCountNode = outerNode.addChildElement('ageBandRateCount', 'http://capbluecross.com/schema/application/RatingSystem/v1.0', '');
-                    element.populateXmlNode(ageBandRateCountNode);
-                }
-            }
-        }
     }
     #end
 }

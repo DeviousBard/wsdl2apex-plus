@@ -1,11 +1,15 @@
 package com.deviousbard.salesforce.wsdl;
 
 public class ElementDefinition {
+    private static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
     private String name;
+    private String elementNamespace;
     private String type;
-    private String namespace;
-    private String required;
-    private boolean primitive;
+    private String typeNamespace;
+    private boolean required;
+    private int minOccurs;
+    private int maxOccurs;
+    private boolean nilable;
 
     public String getName() {
         return name;
@@ -13,6 +17,14 @@ public class ElementDefinition {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getElementNamespace() {
+        return elementNamespace;
+    }
+
+    public void setElementNamespace(String elementNamespace) {
+        this.elementNamespace = elementNamespace;
     }
 
     public String getType() {
@@ -23,28 +35,51 @@ public class ElementDefinition {
         this.type = type;
     }
 
-    public String getNamespace() {
-        return namespace;
+    public String getTypeNamespace() {
+        return typeNamespace;
     }
 
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
+    public void setTypeNamespace(String typeNamespace) {
+        this.typeNamespace = typeNamespace;
     }
 
-    public String getRequired() {
+    public boolean isRequired() {
         return required;
     }
 
-    public void setRequired(String required) {
+    public void setRequired(boolean required) {
         this.required = required;
     }
 
     public boolean isPrimitive() {
-        return primitive;
+        return (this.typeNamespace != null && this.typeNamespace.equals(XML_SCHEMA_NAMESPACE));
     }
 
-    public void setPrimitive(boolean primitive) {
-        this.primitive = primitive;
+    public int getMinOccurs() {
+        return minOccurs;
     }
 
+    public void setMinOccurs(int minOccurs) {
+        this.minOccurs = minOccurs;
+    }
+
+    public int getMaxOccurs() {
+        return maxOccurs;
+    }
+
+    public void setMaxOccurs(int maxOccurs) {
+        this.maxOccurs = maxOccurs;
+    }
+
+    public boolean isNilable() {
+        return nilable;
+    }
+
+    public void setNilable(boolean nilable) {
+        this.nilable = nilable;
+    }
+
+    public boolean isMultiOccurring() {
+        return (this.maxOccurs == -1 || maxOccurs > 1);
+    }
 }

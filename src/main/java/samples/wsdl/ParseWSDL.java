@@ -34,10 +34,11 @@ public class ParseWSDL {
 		/* For detailed schema information see the FullSchemaParser.java sample.*/
 		out("Schemas: ");
 		for (Schema schema : defs.getSchemas()) {
-			out("  TargetNamespace: \t" + schema.getTargetNamespace());
+			out("  Schema Namespace: \t" + schema.getTargetNamespace());
+			out("  Schema File: \t\t\t" + schema.getSchemaLocation() + "\n");
 		}
 		out("\n");
-		
+
 		out("Messages: ");
 		for (Message msg : defs.getMessages()) {
 			out("  Message Name: " + msg.getName());
