@@ -74,10 +74,10 @@ public class WSDL2ApexPlusGenerator {
                 parseSchema(new SchemaParser().parse(schemaFileName), baseDir);
             }
             for (ComplexType ct : schema.getComplexTypes()) {
-                TypeDefinition td = new TypeDefinition();
+                ComplexTypeDefinition td = new ComplexTypeDefinition();
                 td.setName(ct.getName());
                 td.setNamespace(ct.getNamespaceUri());
-                sd.addType(td);
+                sd.addComplexType(td);
 
                 for (SchemaComponent sc : ((ModelGroup) ct.getModel()).getParticles()) {
                     if (sc.getClass().getSimpleName().equals("Element")) {
@@ -97,6 +97,24 @@ public class WSDL2ApexPlusGenerator {
                     }
                 }
             }
+
+            for (SimpleType st : schema.getSimpleTypes()) {
+                SimpleTypeDefinition std = new SimpleTypeDefinition();
+                std.setName(st.getName());
+                QName baseQualifiedName = st.getRestriction().getBase();
+                std.setBase(baseQualifiedName.getLocalPart());
+                std.setNamespace(baseQualifiedName.getNamespaceURI());
+                if (st.getRestriction().hasEnumerationFacet()) {
+                    std.addEnumerationList(st.getRestriction().getEnumerationFacets());
+                }
+                if (st.getRestriction().getMinLengthFacet() != null) {
+                    std.setMinLength(Integer.parseInt(st.getRestriction().getMinLengthFacet().getValue()));
+                }
+                if (st.getRestriction().getMaxLengthFacet() != null) {
+                    std.setMaxLength(Integer.parseInt(st.getRestriction().getMaxLengthFacet().getValue()));
+                }
+                sd.addSimpleType(std);
+            }
             applyApexSchemaTemplate(sd);
         }
 
@@ -105,7 +123,7 @@ public class WSDL2ApexPlusGenerator {
 //        TypeDefinition td = new TypeDefinition();
 //        td.setName("AgeBandRateCountsType");
 //        td.setNamespace("http://capbluecross.com/schema/application/RatingSystem/v1.0");
-//        sd.addType(td);
+//        sd.addComplexType(td);
 //        ElementDefinition ed = new ElementDefinition();
 //        ed.setName("ageBandRateCount");
 //        ed.setType("AgeBandRateCountType");
@@ -115,7 +133,7 @@ public class WSDL2ApexPlusGenerator {
 //        td = new TypeDefinition();
 //        td.setName("AgeBandRateCountType");
 //        td.setNamespace("http://capbluecross.com/schema/application/RatingSystem/v1.0");
-//        sd.addType(td);
+//        sd.addComplexType(td);
 //        ed = new ElementDefinition();
 //        ed.setName("age");
 //        ed.setRequired("true");

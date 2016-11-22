@@ -2,7 +2,7 @@
 
 public class ${schema.name} {
 
-    #foreach ($type in $schema.types)public class ${type.name} {
+    #foreach ($type in $schema.complexTypes)public class ${type.name} {
         #foreach ($element in $type.elements)public ${schema.getApexType($type, $element, true)} ${element.name};
         #end
 

@@ -14,26 +14,14 @@
 
 package samples.schema;
 
-import com.predic8.schema.Appinfo;
-import com.predic8.schema.Attribute;
-import com.predic8.schema.ComplexContent;
-import com.predic8.schema.ComplexType;
-import com.predic8.schema.Derivation;
-import com.predic8.schema.Documentation;
-import com.predic8.schema.Element;
-import com.predic8.schema.Import;
-import com.predic8.schema.Include;
-import com.predic8.schema.ModelGroup;
-import com.predic8.schema.Schema;
-import com.predic8.schema.SchemaComponent;
-import com.predic8.schema.SchemaParser;
-import com.predic8.schema.SimpleType;
+import com.predic8.schema.*;
+import com.predic8.schema.restriction.facet.EnumerationFacet;
 
 public class ParseSchema {
 
     public static void main(String[] args) {
         SchemaParser parser = new SchemaParser();
-        Schema schema = parser.parse("C:/projects/service-rating-InsuranceRates_v2.0/RatingSystem.xsd");
+        Schema schema = parser.parse("C:/projects/service-rating-InsuranceRates_v2.0/Users.xsd");
 
         out("-------------- Schema Information --------------");
         out("  Schema TargetNamespace: " + schema.getTargetNamespace());
@@ -133,6 +121,17 @@ public class ParseSchema {
             for (SimpleType st : schema.getSimpleTypes()) {
                 out("    SimpleType Name: " + st.getName());
                 out("    SimpleType Restriction: " + st.getRestriction());
+                if (st.getRestriction().hasEnumerationFacet()) {
+                    for (EnumerationFacet ef : st.getRestriction().getEnumerationFacets()) {
+                        out("       Enumeration: " + ef.getValue());
+                    }
+                }
+                if (st.getRestriction().getMinLengthFacet() != null) {
+                    out ("        Min Length: " + st.getRestriction().getMinLengthFacet().getValue());
+                }
+                if (st.getRestriction().getMaxLengthFacet() != null) {
+                    out ("        Max Length: " + st.getRestriction().getMaxLengthFacet().getValue());
+                }
                 out("    SimpleType Union: " + st.getUnion());
                 out("    SimpleType List: " + st.getList());
             }
