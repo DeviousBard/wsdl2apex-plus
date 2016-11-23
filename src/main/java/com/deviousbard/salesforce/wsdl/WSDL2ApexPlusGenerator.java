@@ -57,7 +57,7 @@ public class WSDL2ApexPlusGenerator {
         }
     }
 
-    private void parseSchema(Schema schema, String baseDir) {
+    private SchemaDefinition parseSchema(Schema schema, String baseDir) {
         SchemaDefinition sd = new SchemaDefinition();
         String schemaLocation = schema.getSchemaLocation();
         if (schemaLocation != null && !schemaLocation.equals("") && !parsedSchemaSet.contains(schemaLocation)) {
@@ -71,7 +71,8 @@ public class WSDL2ApexPlusGenerator {
             SchemaParser schemaParser = new SchemaParser();
             Schema parsedSchema = schemaParser.parse(schemaFileName);
             for (Import schemaImport : parsedSchema.getImports()) {
-                parseSchema(new SchemaParser().parse(schemaFileName), baseDir);
+                SchemaDefinition importedSchema = parseSchema(new SchemaParser().parse(schemaFileName), baseDir);
+                sd.addImport(importedSchema);
             }
             for (ComplexType ct : schema.getComplexTypes()) {
                 ComplexTypeDefinition td = new ComplexTypeDefinition();
@@ -117,6 +118,7 @@ public class WSDL2ApexPlusGenerator {
             }
             applyApexSchemaTemplate(sd);
         }
+        return sd;
 
 
 //        sd.setName("RatingSystemV10_XSD");

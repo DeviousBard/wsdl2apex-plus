@@ -9,7 +9,8 @@ public class SchemaDefinition {
     private String name;
     private String namespace;
     private List<ComplexTypeDefinition> complexTypes = new ArrayList<>();
-    private Map<String, SimpleTypeDefinition> simpleTypes = new HashMap<>();
+    private static Map<String, SimpleTypeDefinition> simpleTypes = new HashMap<>();
+    private Map<String, SchemaDefinition> imports = new HashMap<>();
 
     public String getName() {
         return name;
@@ -32,7 +33,12 @@ public class SchemaDefinition {
     }
 
     public void addSimpleType(SimpleTypeDefinition td) {
-        this.simpleTypes.put(td.getName(), td);
+        simpleTypes.put(td.getName(), td);
+    }
+
+    public void addImport(SchemaDefinition sd) {imports.put(sd.getNamespace(), sd);}
+    public Map<String, SchemaDefinition> getImports() {
+        return imports;
     }
 
     public String getNamespace() {
@@ -47,9 +53,9 @@ public class SchemaDefinition {
         return simpleTypes;
     }
 
-    public void setSimpleTypes(Map<String, SimpleTypeDefinition> simpleTypes) {
-        this.simpleTypes = simpleTypes;
-    }
+//    public void setSimpleTypes(Map<String, SimpleTypeDefinition> simpleTypes) {
+//        simpleTypes = simpleTypes;
+//    }
 
     public String getApexType(ElementDefinition ed, boolean qualified) {
         StringBuilder apexType = new StringBuilder();
