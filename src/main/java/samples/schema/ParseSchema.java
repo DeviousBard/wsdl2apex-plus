@@ -21,7 +21,7 @@ public class ParseSchema {
 
     public static void main(String[] args) {
         SchemaParser parser = new SchemaParser();
-        Schema schema = parser.parse("C:/projects/service-rating-InsuranceRates_v2.0/Users.xsd");
+        Schema schema = parser.parse(args[0]);
 
         out("-------------- Schema Information --------------");
         out("  Schema TargetNamespace: " + schema.getTargetNamespace());

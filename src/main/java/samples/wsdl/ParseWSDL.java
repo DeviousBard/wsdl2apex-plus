@@ -22,10 +22,10 @@ public class ParseWSDL {
 	public static void main(String[] args) {
 		WSDLParser parser = new WSDLParser();
 
-		Definitions defs = parser.parse("C:/projects/service-rating-InsuranceRates_v2.0/InsuranceRates.wsdl");
+		Definitions defs = parser.parse(args[0]);
 
 		out("-------------- WSDL Details --------------");
-		out("TargenNamespace: \t" + defs.getTargetNamespace());
+		out("Target Namespace: \t" + defs.getTargetNamespace());
 		if (defs.getDocumentation() != null) {
 			out("Documentation: \t\t" + defs.getDocumentation());
 		}

@@ -83,12 +83,19 @@ public class WSDL2ApexPlusGenerator {
                 for (SchemaComponent sc : ((ModelGroup) ct.getModel()).getParticles()) {
                     if (sc.getClass().getSimpleName().equals("Element")) {
                         Element el = (Element) sc;
+                        System.out.println("el: " + el);
                         ElementDefinition ed = new ElementDefinition();
                         ed.setName(el.getName());
                         ed.setElementNamespace(el.getNamespaceUri());
                         QName qualifiedType = el.getType();
-                        ed.setType(qualifiedType.getLocalPart());
-                        ed.setTypeNamespace(qualifiedType.getNamespaceURI());
+                        if (qualifiedType != null) {
+                            ed.setType(qualifiedType.getLocalPart());
+                            ed.setTypeNamespace(qualifiedType.getNamespaceURI());
+                        } else if (el.getEmbeddedType() != null && el.getEmbeddedType() instanceof ComplexType) {
+                            ComplexType embeddedType = (ComplexType)el.getEmbeddedType();
+                            if (embeddedType.getSequence() != null) {
+                            }
+                        }
                         ed.setMinOccurs(el.getMinOccurs() == null || el.getMinOccurs().equals("") ? 0 : Integer.parseInt(el.getMinOccurs()));
                         ed.setMaxOccurs(el.getMaxOccurs() == null || el.getMaxOccurs().equals("") ? 0 : el.getMaxOccurs().equals("unbounded") ? -1 : Integer.parseInt(el.getMaxOccurs()));
 //                        System.out.println("element name: " + el.getName() + " - minOccurs: " + el.getMinOccurs() + "   maxOccurs: " + el.getMaxOccurs());
