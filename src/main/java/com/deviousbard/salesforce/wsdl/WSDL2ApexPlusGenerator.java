@@ -11,6 +11,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.FileWriter;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ public class WSDL2ApexPlusGenerator {
             fw = new FileWriter("/tmp/" + sd.getName() + ".cls");
             apexSchemaTemplate.merge(context, fw);
         } catch (Exception e) {
+
             e.printStackTrace();
         } finally {
             try {
@@ -58,7 +60,7 @@ public class WSDL2ApexPlusGenerator {
     }
 
     private SchemaDefinition parseSchema(Schema schema, String baseDir) {
-        SchemaDefinition sd = new SchemaDefinition();
+        SchemaDefinition sd = new SchemaDefinition(schema, new HashMap<String, String>());
         String schemaLocation = schema.getSchemaLocation();
         if (schemaLocation != null && !schemaLocation.equals("") && !parsedSchemaSet.contains(schemaLocation)) {
             String schemaFileName = baseDir + schemaLocation;

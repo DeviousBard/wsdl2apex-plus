@@ -1,16 +1,26 @@
 package com.deviousbard.salesforce.wsdl;
 
-import java.util.ArrayList;
+import com.predic8.schema.Schema;
+import com.predic8.schema.SimpleType;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SchemaDefinition {
     private String name;
     private String namespace;
-    private List<ComplexTypeDefinition> complexTypes = new ArrayList<>();
-    private static Map<String, SimpleTypeDefinition> simpleTypes = new HashMap<>();
+    private Map<String, ElementDefinition> elements = new HashMap<>();
+    private Map<String, ComplexTypeDefinition> complexTypes = new HashMap<>();
+    private Map<String, SimpleTypeDefinition> simpleTypes = new HashMap<>();
     private Map<String, SchemaDefinition> imports = new HashMap<>();
+    private Schema schema;
+    private Map<String, String> classNameMap = new HashMap<>();
+
+    public SchemaDefinition(Schema schema, Map<String, String> classNameMap) {
+        this.schema = schema;
+        this.classNameMap = classNameMap;
+        this.parseSchema();
+    }
 
     public String getName() {
         return name;
@@ -20,23 +30,22 @@ public class SchemaDefinition {
         this.name = name;
     }
 
-    public List<ComplexTypeDefinition> getComplexTypes() {
-        return complexTypes;
-    }
-
-    public void setComplexTypes(List<ComplexTypeDefinition> complexTypes) {
-        this.complexTypes = complexTypes;
+    public void addElement(ElementDefinition ed) {
+        this.elements.put(ed.getName(), ed);
     }
 
     public void addComplexType(ComplexTypeDefinition td) {
-        this.complexTypes.add(td);
+        this.complexTypes.put(td.getName(), td);
     }
 
     public void addSimpleType(SimpleTypeDefinition td) {
         simpleTypes.put(td.getName(), td);
     }
 
-    public void addImport(SchemaDefinition sd) {imports.put(sd.getNamespace(), sd);}
+    public void addImport(SchemaDefinition sd) {
+        imports.put(sd.getNamespace(), sd);
+    }
+
     public Map<String, SchemaDefinition> getImports() {
         return imports;
     }
@@ -53,9 +62,13 @@ public class SchemaDefinition {
         return simpleTypes;
     }
 
-//    public void setSimpleTypes(Map<String, SimpleTypeDefinition> simpleTypes) {
-//        simpleTypes = simpleTypes;
-//    }
+    public Map<String, ComplexTypeDefinition> getComplexTypes() {
+        return complexTypes;
+    }
+
+    public Map<String, ElementDefinition> getElements() {
+        return elements;
+    }
 
     public String getApexType(ElementDefinition ed, boolean qualified) {
         StringBuilder apexType = new StringBuilder();
@@ -90,5 +103,26 @@ public class SchemaDefinition {
 
     public SimpleTypeDefinition getSimpleType(String typeName) {
         return simpleTypes.get(typeName);
+    }
+
+    private void parseSchema() {
+        this.setName(schema.getName());
+        this.setNamespace(schema.getTargetNamespace());
+        this.processSimpleTypes();
+        this.processComplexTypes();
+        this.processElements();
+        schema.getImportedSchemas();
+    }
+
+    private void processSimpleTypes() {
+        for (SimpleType st : schema.getSimpleTypes()) {
+            this.addSimpleType(new SimpleTypeDefinition(st));
+        }
+    }
+
+    private void processComplexTypes() {
+    }
+
+    private void processElements() {
     }
 }
