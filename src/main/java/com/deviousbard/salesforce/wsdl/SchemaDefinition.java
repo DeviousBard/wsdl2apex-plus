@@ -1,5 +1,7 @@
 package com.deviousbard.salesforce.wsdl;
 
+import com.predic8.schema.ComplexType;
+import com.predic8.schema.Element;
 import com.predic8.schema.Schema;
 import com.predic8.schema.SimpleType;
 
@@ -72,7 +74,7 @@ public class SchemaDefinition {
 
     public String getApexType(ElementDefinition ed, boolean qualified) {
         StringBuilder apexType = new StringBuilder();
-        if (ed.isPrimitive()) {
+        if (ed.isSimpleType()) {
             apexType.append(getPrimitiveApexType(ed.getType()));
         } else {
             apexType.append(qualified ? getName() : "").append(qualified ? "." : "").append(ed.getType());
@@ -116,13 +118,19 @@ public class SchemaDefinition {
 
     private void processSimpleTypes() {
         for (SimpleType st : schema.getSimpleTypes()) {
-            this.addSimpleType(new SimpleTypeDefinition(st));
+            this.addSimpleType(new SimpleTypeDefinition(st, this));
         }
     }
 
     private void processComplexTypes() {
+        for (ComplexType ct : schema.getComplexTypes()) {
+            this.addComplexType(new ComplexTypeDefinition(ct, this));
+        }
     }
 
     private void processElements() {
+        for (Element e : schema.getElements()) {
+            this.addElement(new ElementDefinition(e, this));
+        }
     }
 }

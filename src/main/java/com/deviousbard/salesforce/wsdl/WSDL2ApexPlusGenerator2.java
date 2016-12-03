@@ -28,6 +28,12 @@ public class WSDL2ApexPlusGenerator2 {
             for (SimpleTypeDefinition std : sd.getSimpleTypes().values()) {
                 System.out.print("   Simple Type: " + std.toString() + "\n");
             }
+            for (ComplexTypeDefinition ctd: sd.getComplexTypes().values()) {
+                System.out.print("   Complex Type: " + ctd.toString() + "\n");
+            }
+            for (ElementDefinition ed: sd.getElements().values()) {
+                System.out.print("   Element: " + ed.toString() + "\n");
+            }
         }
     }
 

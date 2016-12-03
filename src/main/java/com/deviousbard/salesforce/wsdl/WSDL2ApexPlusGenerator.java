@@ -77,7 +77,7 @@ public class WSDL2ApexPlusGenerator {
                 sd.addImport(importedSchema);
             }
             for (ComplexType ct : schema.getComplexTypes()) {
-                ComplexTypeDefinition td = new ComplexTypeDefinition();
+                ComplexTypeDefinition td = new ComplexTypeDefinition(ct);
                 td.setName(ct.getName());
                 td.setNamespace(ct.getNamespaceUri());
                 sd.addComplexType(td);
@@ -86,7 +86,7 @@ public class WSDL2ApexPlusGenerator {
                     if (sc.getClass().getSimpleName().equals("Element")) {
                         Element el = (Element) sc;
                         System.out.println("el: " + el);
-                        ElementDefinition ed = new ElementDefinition();
+                        ElementDefinition ed = new ElementDefinition(el);
                         ed.setName(el.getName());
                         ed.setElementNamespace(el.getNamespaceUri());
                         QName qualifiedType = el.getType();
@@ -109,7 +109,7 @@ public class WSDL2ApexPlusGenerator {
             }
 
             for (SimpleType st : schema.getSimpleTypes()) {
-                SimpleTypeDefinition std = new SimpleTypeDefinition();
+                SimpleTypeDefinition std = new SimpleTypeDefinition(st);
                 std.setName(st.getName());
                 QName baseQualifiedName = st.getRestriction().getBase();
                 std.setBase(baseQualifiedName.getLocalPart());

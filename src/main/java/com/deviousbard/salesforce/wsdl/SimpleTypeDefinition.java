@@ -21,11 +21,11 @@ public class SimpleTypeDefinition {
     private String regexPattern;
     private Set<String> enumerations = new HashSet<>();
 
-    public SimpleTypeDefinition(SimpleType st) {
-        parseSimpleType(st);
+    public SimpleTypeDefinition(SimpleType st, SchemaDefinition sd) {
+        parseSimpleType(st, sd);
     }
 
-    private void parseSimpleType(SimpleType st) {
+    private void parseSimpleType(SimpleType st, SchemaDefinition sd) {
         this.setName(st.getName());
         this.setNamespace(st.getNamespaceUri());
         BaseRestriction br = st.getRestriction();
