@@ -11,7 +11,6 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.FileWriter;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,7 +59,7 @@ public class WSDL2ApexPlusGenerator {
     }
 
     private SchemaDefinition parseSchema(Schema schema, String baseDir) {
-        SchemaDefinition sd = new SchemaDefinition(schema, new HashMap<String, String>());
+        SchemaDefinition sd = new SchemaDefinition(schema);
         String schemaLocation = schema.getSchemaLocation();
         if (schemaLocation != null && !schemaLocation.equals("") && !parsedSchemaSet.contains(schemaLocation)) {
             String schemaFileName = baseDir + schemaLocation;
@@ -68,7 +67,6 @@ public class WSDL2ApexPlusGenerator {
             parsedSchemaSet.add(schemaFileName);
             String schemaName = schemaLocation.split("\\.xsd")[0] + "_XSD";
             //System.out.println("schemaName:  " + schemaName);
-            sd.setName(schemaName);
             sd.setNamespace(schema.getTargetNamespace());
             SchemaParser schemaParser = new SchemaParser();
             Schema parsedSchema = schemaParser.parse(schemaFileName);
@@ -77,7 +75,7 @@ public class WSDL2ApexPlusGenerator {
                 sd.addImport(importedSchema);
             }
             for (ComplexType ct : schema.getComplexTypes()) {
-                ComplexTypeDefinition td = new ComplexTypeDefinition(ct);
+                ComplexTypeDefinition td = new ComplexTypeDefinition(ct, sd);
                 td.setName(ct.getName());
                 td.setNamespace(ct.getNamespaceUri());
                 sd.addComplexType(td);
@@ -86,7 +84,7 @@ public class WSDL2ApexPlusGenerator {
                     if (sc.getClass().getSimpleName().equals("Element")) {
                         Element el = (Element) sc;
                         System.out.println("el: " + el);
-                        ElementDefinition ed = new ElementDefinition(el);
+                        ElementDefinition ed = new ElementDefinition(el, sd);
                         ed.setName(el.getName());
                         ed.setElementNamespace(el.getNamespaceUri());
                         QName qualifiedType = el.getType();
@@ -109,7 +107,7 @@ public class WSDL2ApexPlusGenerator {
             }
 
             for (SimpleType st : schema.getSimpleTypes()) {
-                SimpleTypeDefinition std = new SimpleTypeDefinition(st);
+                SimpleTypeDefinition std = new SimpleTypeDefinition(st, sd);
                 std.setName(st.getName());
                 QName baseQualifiedName = st.getRestriction().getBase();
                 std.setBase(baseQualifiedName.getLocalPart());
@@ -174,7 +172,7 @@ public class WSDL2ApexPlusGenerator {
         ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
         ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
         ve.init();
-        apexSchemaTemplate = ve.getTemplate("templates/apex-schema.vm");
+        apexSchemaTemplate = ve.getTemplate("templates/apex-schema_OLD.vm");
         apexWebServiceTemplate = ve.getTemplate("templates/apex-web-service.vm");
     }
 

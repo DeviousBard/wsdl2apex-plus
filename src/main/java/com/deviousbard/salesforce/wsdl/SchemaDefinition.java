@@ -9,27 +9,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SchemaDefinition {
-    private String name;
     private String namespace;
     private Map<String, ElementDefinition> elements = new HashMap<>();
     private Map<String, ComplexTypeDefinition> complexTypes = new HashMap<>();
     private Map<String, SimpleTypeDefinition> simpleTypes = new HashMap<>();
     private Map<String, SchemaDefinition> imports = new HashMap<>();
     private Schema schema;
-    private Map<String, String> classNameMap = new HashMap<>();
 
-    public SchemaDefinition(Schema schema, Map<String, String> classNameMap) {
+    public SchemaDefinition(Schema schema) {
         this.schema = schema;
-        this.classNameMap = classNameMap;
         this.parseSchema();
     }
 
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return ApexUtility.getApexClassFromNamespace(this.getNamespace());
     }
 
     public void addElement(ElementDefinition ed) {
@@ -72,44 +65,10 @@ public class SchemaDefinition {
         return elements;
     }
 
-    public String getApexType(ElementDefinition ed, boolean qualified) {
-        StringBuilder apexType = new StringBuilder();
-        if (ed.isSimpleType()) {
-            apexType.append(getPrimitiveApexType(ed.getType()));
-        } else {
-            apexType.append(qualified ? getName() : "").append(qualified ? "." : "").append(ed.getType());
-        }
-        return apexType.toString();
-    }
-
-    public String getPrimitiveApexType(String type) {
-        String lType = type.toLowerCase();
-        StringBuilder primitiveApexType = new StringBuilder();
-        if (lType.contains("string") || lType.contains("token")) {
-            primitiveApexType.append("String");
-        } else if (lType.contains("int")) {
-            primitiveApexType.append("Integer");
-        } else if (lType.contains("datetime")) {
-            primitiveApexType.append("DateTime");
-        } else if (lType.contains("date")) {
-            primitiveApexType.append("Date");
-        } else if (lType.contains("decimal")) {
-            primitiveApexType.append("Decimal");
-        }
-        return primitiveApexType.toString();
-    }
-
-    public boolean isSimpleType(String typeName) {
-        return simpleTypes.containsKey(typeName);
-    }
-
-    public SimpleTypeDefinition getSimpleType(String typeName) {
-        return simpleTypes.get(typeName);
-    }
-
     private void parseSchema() {
-        this.setName(schema.getName());
         this.setNamespace(schema.getTargetNamespace());
+        System.out.println("schema name: " + getName());
+        System.out.println("schema namespace: " + schema.getTargetNamespace());
         this.processSimpleTypes();
         this.processComplexTypes();
         this.processElements();

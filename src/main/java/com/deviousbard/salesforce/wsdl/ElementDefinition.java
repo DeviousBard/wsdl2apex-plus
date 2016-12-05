@@ -15,12 +15,14 @@ public class ElementDefinition {
     private int minOccurs;
     private int maxOccurs;
     private boolean nilable;
+    SchemaDefinition schemaDefinition;
 
     public ElementDefinition(Element e, SchemaDefinition sd) {
         parseElement(e, sd);
     }
 
     private void parseElement(Element el, SchemaDefinition sd) {
+        this.schemaDefinition = sd;
         this.setName(el.getName());
         this.setElementNamespace(el.getNamespaceUri());
         QName qualifiedType = el.getType();
@@ -108,6 +110,14 @@ public class ElementDefinition {
         return (this.maxOccurs == -1 || maxOccurs > 1);
     }
 
+    public String getApexType() {
+        if (this.isSimpleType()) {
+            return ApexUtility.getApexTypeFromSimpleType("{" + typeNamespace + "}" + type);
+        } else {
+            return ApexUtility.getApexClassFromNamespace(this.getTypeNamespace()) + "." + this.getType();
+       }
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -116,6 +126,7 @@ public class ElementDefinition {
                 .append("'; minOccurs=").append(getMinOccurs()).append("; maxOccurs=").append(getMaxOccurs())
                 .append("; isRequired=").append(isRequired()).append("; isMultiOccurring=").append(isMultiOccurring())
                 .append("; isSimpleType=").append(isSimpleType()).append("; isNilable=").append(isNilable())
+                .append("; apexType='").append(getApexType()).append("'")
                 .append("]");
         return sb.toString();
     }

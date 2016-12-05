@@ -32,7 +32,7 @@ public class SimpleTypeDefinition {
         if (br != null) {
             QName base = br.getBase();
             if (base != null) {
-                this.setBase(base.getQualifiedName());
+                this.setBase(base.toString());
             }
             if (br.hasEnumerationFacet()) {
                 this.addEnumerationList(br.getEnumerationFacets());
@@ -109,7 +109,7 @@ public class SimpleTypeDefinition {
     }
 
     public String getRegexPattern() {
-        return regexPattern;
+        return (regexPattern == null ? null : regexPattern.replace("\\", "\\\\"));
     }
 
     public void setRegexPattern(String regexPattern) {
@@ -146,8 +146,18 @@ public class SimpleTypeDefinition {
         return this.minLength > -1;
     }
 
+    public boolean isLengthRestricted() {
+        return this.length > -1;
+    }
+
     public boolean isMaxLengthRestricted() {
         return this.maxLength > -1;
+    }
+
+    public boolean isRegexPatternRestricted() {return this.regexPattern != null;}
+
+    public String getApexType() {
+        return ApexUtility.getApexTypeFromSimpleType(this.base);
     }
 
     @Override
@@ -155,7 +165,8 @@ public class SimpleTypeDefinition {
         StringBuilder sb = new StringBuilder();
         sb.append("SimpleTypeDefinition[base='").append(getBase()).append("'; name='").append(getName()).append("'; namespace='").append(getNamespace())
                 .append("'; minLength=").append(getMinLength()).append("; maxLength=").append(getMaxLength()).append("; length=").append(getLength())
-                .append("; regexPattern='").append(getRegexPattern()).append("'; enumerations=").append(getEnumerations()).append("]");
+                .append("; regexPattern='").append(getRegexPattern()).append("'; apexType='").append(getApexType())
+                .append("'; enumerations=").append(getEnumerations()).append("]");
         return sb.toString();
     }
 }

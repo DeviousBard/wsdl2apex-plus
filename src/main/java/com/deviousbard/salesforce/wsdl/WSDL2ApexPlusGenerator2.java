@@ -4,18 +4,28 @@ import com.predic8.schema.Schema;
 import com.predic8.schema.SchemaParser;
 import com.predic8.wsdl.Definitions;
 import com.predic8.wsdl.WSDLParser;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.*;
 
 public class WSDL2ApexPlusGenerator2 {
 
-    Map<String, Definitions> wsdlMap = new HashMap<>();
-    Map<String, Schema> schemaMap = new HashMap<>();
-    Map<String, String> classNameMap = new HashMap<>();
+    private Map<String, Definitions> wsdlMap = new HashMap<>();
+    private Map<String, Schema> schemaMap = new HashMap<>();
+
+    private VelocityEngine ve = new VelocityEngine();
+    private Template apexSchemaTemplate;
+    private Template apexWebServiceTemplate;
 
     private void generateApex(String wsdlFile) {
+        initializeTemplateEngine();
         parseWsdlList(Collections.singletonList(wsdlFile));
         askForClassNames();
         for (String key : wsdlMap.keySet()) {
@@ -24,7 +34,8 @@ public class WSDL2ApexPlusGenerator2 {
 
         for (String key : schemaMap.keySet()) {
             System.out.print("Schema:\n" + key + " - " + schemaMap.get(key) + "\n");
-            SchemaDefinition sd = new SchemaDefinition(schemaMap.get(key), classNameMap);
+            SchemaDefinition sd = new SchemaDefinition(schemaMap.get(key));
+            applyApexSchemaTemplate(sd);
             for (SimpleTypeDefinition std : sd.getSimpleTypes().values()) {
                 System.out.print("   Simple Type: " + std.toString() + "\n");
             }
@@ -33,6 +44,36 @@ public class WSDL2ApexPlusGenerator2 {
             }
             for (ElementDefinition ed: sd.getElements().values()) {
                 System.out.print("   Element: " + ed.toString() + "\n");
+            }
+        }
+    }
+
+    private void initializeTemplateEngine() {
+        new ClasspathResourceLoader();
+        ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        ve.init();
+        apexSchemaTemplate = ve.getTemplate("templates/apex-schema.vm");
+        apexWebServiceTemplate = ve.getTemplate("templates/apex-web-service.vm");
+    }
+
+    private void applyApexSchemaTemplate(SchemaDefinition sd) {
+        VelocityContext context = new VelocityContext();
+        context.put("schema", sd);
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter("/tmp/" + sd.getName() + ".cls");
+            apexSchemaTemplate.merge(context, fw);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fw != null) {
+                    fw.close();
+                }
+            } catch (Exception e) {
+                // Intentionally ignored
             }
         }
     }
@@ -50,7 +91,7 @@ public class WSDL2ApexPlusGenerator2 {
                     className = defaultClassName;
                 }
                 if (defs.getTargetNamespace() != null && !(defs.getTargetNamespace().equals(""))) {
-                    classNameMap.put(defs.getTargetNamespace(), className);
+                    ApexUtility.addApexClassName(defs.getTargetNamespace(), className);
                 }
             }
 
@@ -65,7 +106,7 @@ public class WSDL2ApexPlusGenerator2 {
                     className = defaultClassName;
                 }
                 if (schema.getTargetNamespace() != null && !(schema.getTargetNamespace().equals(""))) {
-                    classNameMap.put(schema.getTargetNamespace(), className);
+                    ApexUtility.addApexClassName(schema.getTargetNamespace(), className);
                 }
             }
         } catch (Exception e) {
