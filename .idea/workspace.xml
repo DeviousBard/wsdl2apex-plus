@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff53c80d-4bb1-4006-bd5d-344d0fd6007c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/WsdlDefinition.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/ApexUtility.java" afterPath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/ApexUtility.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/ElementDefinition.java" afterPath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/ElementDefinition.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/SchemaDefinition.java" afterPath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/SchemaDefinition.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/SimpleTypeDefinition.java" afterPath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/SimpleTypeDefinition.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm" afterPath="$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm" />
     </list>
     <ignored path="wsdl2apex-plus.iws" />
@@ -1013,7 +1008,7 @@
       <workItem from="1480940025318" duration="40000" />
       <workItem from="1480940067547" duration="1097000" />
       <workItem from="1480942304665" duration="13560000" />
-      <workItem from="1481026331540" duration="8583000" />
+      <workItem from="1481026331540" duration="8610000" />
     </task>
     <task id="LOCAL-00001" summary="Checkpoint.">
       <created>1479758617650</created>
@@ -1050,11 +1045,18 @@
       <option name="project" value="LOCAL" />
       <updated>1480968194894</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Generating schema files correctly.">
+      <created>1481036183156</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1481036183156</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="81142000" />
+    <option name="totallyTimeSpent" value="81169000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="3" y="3" width="1874" height="1013" extended-state="0" />
@@ -1103,7 +1105,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Checkpoint." />
-    <option name="LAST_COMMIT_MESSAGE" value="Checkpoint." />
+    <MESSAGE value="Generating schema files correctly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Generating schema files correctly." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
