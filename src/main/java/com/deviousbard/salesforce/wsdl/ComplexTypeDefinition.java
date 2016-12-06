@@ -21,7 +21,7 @@ public class ComplexTypeDefinition {
 
     private void parseComplexType(ComplexType ct, SchemaDefinition sd, String elementName) {
         if (elementName != null) {
-            this.setName("AnonymousType_" + elementName);
+            this.setName(elementName + "_element");
         } else {
             this.setName(ct.getName());
         }

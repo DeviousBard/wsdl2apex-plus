@@ -58,6 +58,9 @@ public class AttributeDefinition {
         this.use = use;
     }
 
+    public boolean isHasFixedValue(){return fixedValue != null;}
+    public boolean isHasDefaultValue(){return defaultValue != null;}
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

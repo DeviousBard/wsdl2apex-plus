@@ -22,8 +22,14 @@ public class ${schema.name} {
         public ${element.apexType}#if($element.multiOccurring)[]#end ${element.name};
 #end
 #end
+#foreach($attribute in $type.attributes)
+        public String ${attribute.name}#if($attribute.hasFixedValue) = '${attribute.fixedValue}'#end#if($attribute.hasDefaultValue) = '${attribute.defaultValue}'#end;
+#end
 #foreach($element in $type.elements)
         private String[] ${element.name}_type_info = new String[] {'${element.name}','${element.elementNamespace}','${element.type}','${element.minOccurs}', '${element.maxOccurs}','${element.nilable}'};
+#end
+#foreach($attribute in $type.attributes)
+        private String[] ${attribute.name}_att_info = new String[] {'${attribute.name}'};
 #end
         private String[] apex_schema_type_info = new String[] {'${schema.namespace}','${schema.elementFormQualified}','${schema.attributeFormQualified}'};
         private String[] field_order_type_info = new String[] {#foreach($element in $type.elements)'${element.name}'#if($foreach.hasNext),#end#end};

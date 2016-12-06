@@ -91,7 +91,6 @@ public class SchemaDefinition {
         this.processComplexTypes();
         this.processElements();
         ApexUtility.addSchema(this.getNamespace(), this);
-        schema.getImportedSchemas();
     }
 
     private void processSimpleTypes() {

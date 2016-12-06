@@ -30,7 +30,9 @@ public class ElementDefinition {
             this.setType(qualifiedType.getLocalPart());
             this.setTypeNamespace(qualifiedType.getNamespaceURI());
         } else if (el.getEmbeddedType() != null && el.getEmbeddedType() instanceof ComplexType) {
-            sd.addComplexType(new ComplexTypeDefinition((ComplexType)el.getEmbeddedType(), sd, this.getName()));
+            ComplexTypeDefinition ctd = new ComplexTypeDefinition((ComplexType)el.getEmbeddedType(), sd, this.getName());
+            this.setName(ctd.getName());
+            sd.addComplexType(ctd);
         }
         this.setMinOccurs(el.getMinOccurs() == null || el.getMinOccurs().equals("") ? 1 : Integer.parseInt(el.getMinOccurs()));
         this.setMaxOccurs(el.getMaxOccurs() == null || el.getMaxOccurs().equals("") ? 1 : el.getMaxOccurs().equals("unbounded") ? -1 : Integer.parseInt(el.getMaxOccurs()));
