@@ -157,7 +157,7 @@ public class SimpleTypeDefinition {
     public boolean isRegexPatternRestricted() {return this.regexPattern != null;}
 
     public String getApexType() {
-        return ApexUtility.getApexTypeFromSimpleType(this.base);
+        return ApexUtility.getApexTypeFromBaseType(this.base);
     }
 
     @Override

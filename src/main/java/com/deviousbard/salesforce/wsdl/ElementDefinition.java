@@ -12,10 +12,10 @@ public class ElementDefinition {
     private String type;
     private String typeNamespace;
     private boolean required;
-    private int minOccurs;
-    private int maxOccurs;
+    private int minOccurs = 1;
+    private int maxOccurs = 1;
     private boolean nilable;
-    SchemaDefinition schemaDefinition;
+    private SchemaDefinition schemaDefinition;
 
     public ElementDefinition(Element e, SchemaDefinition sd) {
         parseElement(e, sd);
@@ -32,8 +32,8 @@ public class ElementDefinition {
         } else if (el.getEmbeddedType() != null && el.getEmbeddedType() instanceof ComplexType) {
             sd.addComplexType(new ComplexTypeDefinition((ComplexType)el.getEmbeddedType(), sd, this.getName()));
         }
-        this.setMinOccurs(el.getMinOccurs() == null || el.getMinOccurs().equals("") ? 0 : Integer.parseInt(el.getMinOccurs()));
-        this.setMaxOccurs(el.getMaxOccurs() == null || el.getMaxOccurs().equals("") ? 0 : el.getMaxOccurs().equals("unbounded") ? -1 : Integer.parseInt(el.getMaxOccurs()));
+        this.setMinOccurs(el.getMinOccurs() == null || el.getMinOccurs().equals("") ? 1 : Integer.parseInt(el.getMinOccurs()));
+        this.setMaxOccurs(el.getMaxOccurs() == null || el.getMaxOccurs().equals("") ? 1 : el.getMaxOccurs().equals("unbounded") ? -1 : Integer.parseInt(el.getMaxOccurs()));
         this.setRequired(this.getMinOccurs() >= 1);
         this.setNilable(el.isNillable());
     }
@@ -78,8 +78,30 @@ public class ElementDefinition {
         this.required = required;
     }
 
-    public boolean isSimpleType() {
+    public boolean isBaseType() {
         return (this.typeNamespace != null && this.typeNamespace.equals(XML_SCHEMA_NAMESPACE));
+    }
+
+    public boolean isSimpleType() {
+        SchemaDefinition sd = ApexUtility.getSchemaDefinition(this.getTypeNamespace());
+        return sd != null && sd.getSimpleTypes().keySet().contains(this.getType());
+    }
+
+    public boolean isComplexType() {
+        SchemaDefinition sd = ApexUtility.getSchemaDefinition(this.getTypeNamespace());
+        return sd != null && sd.getComplexTypes().keySet().contains(this.getType());
+    }
+
+    public String getSimpleTypeApexType() {
+        String simpleTypeApexType = "";
+        SchemaDefinition sd = ApexUtility.getSchemaDefinition(this.getTypeNamespace());
+        if (sd != null) {
+            SimpleTypeDefinition std = sd.getSimpleTypes().get(this.getType());
+            if (std != null) {
+                simpleTypeApexType = ApexUtility.getApexTypeFromBaseType(std.getBase());
+            }
+        }
+        return simpleTypeApexType;
     }
 
     public int getMinOccurs() {
@@ -111,8 +133,8 @@ public class ElementDefinition {
     }
 
     public String getApexType() {
-        if (this.isSimpleType()) {
-            return ApexUtility.getApexTypeFromSimpleType("{" + typeNamespace + "}" + type);
+        if (this.isBaseType()) {
+            return ApexUtility.getApexTypeFromBaseType("{" + typeNamespace + "}" + type);
         } else {
             return ApexUtility.getApexClassFromNamespace(this.getTypeNamespace()) + "." + this.getType();
        }
@@ -126,7 +148,8 @@ public class ElementDefinition {
                 .append("'; minOccurs=").append(getMinOccurs()).append("; maxOccurs=").append(getMaxOccurs())
                 .append("; isRequired=").append(isRequired()).append("; isMultiOccurring=").append(isMultiOccurring())
                 .append("; isSimpleType=").append(isSimpleType()).append("; isNilable=").append(isNilable())
-                .append("; apexType='").append(getApexType()).append("'")
+                .append("; apexType='").append(getApexType()).append("'; isBaseType=").append(isBaseType())
+                .append("; isSimpleType=").append(isSimpleType()).append("; isComplextype=").append(isComplexType())
                 .append("]");
         return sb.toString();
     }

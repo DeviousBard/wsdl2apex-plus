@@ -2,11 +2,40 @@
 
 public class ${schema.name} {
 
-#foreach($type in $schema.simpleTypes)
+#foreach($type in $schema.complexTypes)
+    // Complex Type Definition:  ${type.name}
+    public class ${type.name} {
+#foreach($element in $type.elements)
+#if($element.baseType)
+        public ${element.apexType} ${element.name};
+#end
+#if($element.simpleType)
+        public ${element.simpleTypeApexType} ${element.name} {
+            get;
+            set {
+                new ${element.apexType}().validate(value, '${element.name}');
+                ${element.name} = value;
+            }
+        }
+#end
+#if($element.complexType)
+        public ${element.apexType}#if($element.multiOccurring)[]#end ${element.name};
+#end
+#end
+#foreach($element in $type.elements)
+        private String[] ${element.name}_type_info = new String[] {'${element.name}','${element.elementNamespace}','${element.type}','${element.minOccurs}', '${element.maxOccurs}','${element.nilable}'};
+#end
+        private String[] apex_schema_type_info = new String[] {'${schema.namespace}','${schema.elementFormQualified}','${schema.attributeFormQualified}'};
+        private String[] field_order_type_info = new String[] {#foreach($element in $type.elements)'${element.name}'#if($foreach.hasNext),#end#end};
+    }
 
-    public class $type.name {
+#end
+
+#foreach($type in $schema.simpleTypes)
+    // Simple Type Definition:  ${type.name}
+    public class ${type.name} {
 #if($type.enumerated)
-        Set<String> enumerations = new Set<String>{#foreach($enumeration in $type.enumerations)'${enumeration}'#if($foreach.hasNext),#end#end};
+        Set<String> enumerations = new Set<String> {#foreach($enumeration in $type.enumerations)'${enumeration}'#if($foreach.hasNext),#end#end};
 #end
         public void validate(${type.apexType} value, String elementName) {
 #if($type.minLengthRestricted)
@@ -30,7 +59,7 @@ public class ${schema.name} {
             }
 #end
 #if($type.regexPatternRestricted)
-            if (!Pattern.matches('${type.regexPattern}')) {
+            if (!Pattern.matches('${type.regexPattern}', value)) {
                 throw new ${schema.name}.SchemaValidationException('Element ' + '"' + elementName + '": '+ '"' + value + '" for "${type.name}" does not match the pattern "${type.regexPattern}"');
             }
 #end

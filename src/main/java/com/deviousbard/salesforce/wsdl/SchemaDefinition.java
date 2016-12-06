@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class SchemaDefinition {
     private String namespace;
+    private boolean elementFormQualified;
+    private boolean attributeFormQualified;
     private Map<String, ElementDefinition> elements = new HashMap<>();
     private Map<String, ComplexTypeDefinition> complexTypes = new HashMap<>();
     private Map<String, SimpleTypeDefinition> simpleTypes = new HashMap<>();
@@ -53,6 +55,22 @@ public class SchemaDefinition {
         this.namespace = namespace;
     }
 
+    public boolean isElementFormQualified() {
+        return elementFormQualified;
+    }
+
+    public void setElementFormQualified(boolean elementFormQualified) {
+        this.elementFormQualified = elementFormQualified;
+    }
+
+    public boolean isAttributeFormQualified() {
+        return attributeFormQualified;
+    }
+
+    public void setAttributeFormQualified(boolean attributeFormQualified) {
+        this.attributeFormQualified = attributeFormQualified;
+    }
+
     public Map<String, SimpleTypeDefinition> getSimpleTypes() {
         return simpleTypes;
     }
@@ -67,11 +85,12 @@ public class SchemaDefinition {
 
     private void parseSchema() {
         this.setNamespace(schema.getTargetNamespace());
-        System.out.println("schema name: " + getName());
-        System.out.println("schema namespace: " + schema.getTargetNamespace());
+        this.setElementFormQualified(schema.getElementFormDefault() != null && schema.getElementFormDefault().equals("qualified"));
+        this.setAttributeFormQualified(schema.getAttributeFormDefault() != null && schema.getAttributeFormDefault().equals("qualified"));
         this.processSimpleTypes();
         this.processComplexTypes();
         this.processElements();
+        ApexUtility.addSchema(this.getNamespace(), this);
         schema.getImportedSchemas();
     }
 
