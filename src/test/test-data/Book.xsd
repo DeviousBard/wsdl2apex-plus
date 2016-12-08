@@ -3,15 +3,24 @@
     elementFormDefault="qualified" attributeFormDefault="unqualified"
     xmlns="http://www.w3.org/2001/XMLSchema"
     xmlns:lib="http://dyomedea.com/ns/library">
-
+    
     <element name="library">
         <complexType>
             <sequence>
                 <element name="book" type="lib:bookType"/>
+                <element name="coverArt">
+                    <complexType>
+                        <sequence>
+                            <element name="artist" type="string"/>
+                            <element name="year" type="int"/>
+                        </sequence>
+                    </complexType>
+                </element>
             </sequence>
         </complexType>
     </element>
 
+    <!--
     <element name="person">
         <complexType>
             <sequence>
@@ -23,8 +32,16 @@
             <attribute name="id" type="ID" use="required"/>
         </complexType>
     </element>
+
+    <element name="library" type="lib:LibraryType"/>
     
-<!--
+    <complexType name="LibraryType">
+        <sequence>
+            <element name="book" type="lib:bookType"/>
+        </sequence>
+    </complexType>
+-->    
+    
     <element name="person" type="lib:PersonType"/>
     
     <complexType name="PersonType">
@@ -36,7 +53,7 @@
         </sequence>
         <attribute name="id" type="ID" use="required"/>
     </complexType>
- -->
+
 
     <complexType name="bookType">
         <sequence>
@@ -46,6 +63,9 @@
                 <complexType>
                     <sequence>
                         <element ref="lib:person" maxOccurs="unbounded"/>
+                        <!--
+                        <element name="person" type="lib:PersonType" maxOccurs="unbounded"/>
+                        -->
                     </sequence>
                 </complexType>
             </element>
@@ -53,6 +73,9 @@
                 <complexType>
                     <sequence>
                         <element ref="lib:person" maxOccurs="unbounded"/>
+                        <!--
+                        <element name="person" type="lib:PersonType" maxOccurs="unbounded"/>
+                        -->
                     </sequence>
                 </complexType>
             </element>

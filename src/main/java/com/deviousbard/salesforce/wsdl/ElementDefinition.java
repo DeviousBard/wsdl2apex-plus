@@ -30,7 +30,8 @@ public class ElementDefinition {
             this.setType(qualifiedType.getLocalPart());
             this.setTypeNamespace(qualifiedType.getNamespaceURI());
         } else if (el.getEmbeddedType() != null && el.getEmbeddedType() instanceof ComplexType) {
-            ComplexTypeDefinition ctd = new ComplexTypeDefinition((ComplexType)el.getEmbeddedType(), sd, this.getName());
+            String complexTypeName = this.getComplexTypeNameForEmbeddedType(el);
+            ComplexTypeDefinition ctd = new ComplexTypeDefinition((ComplexType)el.getEmbeddedType(), sd, complexTypeName);
             this.setName(ctd.getName());
             sd.addComplexType(ctd);
         }
@@ -38,6 +39,24 @@ public class ElementDefinition {
         this.setMaxOccurs(el.getMaxOccurs() == null || el.getMaxOccurs().equals("") ? 1 : el.getMaxOccurs().equals("unbounded") ? -1 : Integer.parseInt(el.getMaxOccurs()));
         this.setRequired(this.getMinOccurs() >= 1);
         this.setNilable(el.isNillable());
+    }
+
+    private String getComplexTypeNameForEmbeddedType(Element el) {
+        String complexTypeName = "";
+//        XMLElement parent = el.getParent();
+//        Sequence sequence = null;
+//        if (parent instanceof Sequence) {
+//            sequence = (Sequence)parent;
+//            complexTypeName = sequence.getElementName().toString();
+//            System.out.println("sequence: " + sequence);
+//            System.out.println("parent name: " + complexTypeName);
+//        }
+//        if (parent != null) {
+//            while ((parent = parent.getParent()) != null) {
+//            complexTypeName = parent.g
+//            }
+//        }
+        return complexTypeName + (complexTypeName.equals("") ? el.getName() : "_" + el.getName());
     }
 
     public String getName() {

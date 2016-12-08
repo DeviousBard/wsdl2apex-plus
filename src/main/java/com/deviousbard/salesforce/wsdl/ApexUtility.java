@@ -28,6 +28,9 @@ public class ApexUtility {
                 case "{http://www.w3.org/2001/XMLSchema}long":
                     apexClass = "Integer";
                     break;
+                case "{http://www.w3.org/2001/XMLSchema}short":
+                    apexClass = "Integer";
+                    break;
                 case "{http://www.w3.org/2001/XMLSchema}NMTOKEN":
                     apexClass = "String";
                     break;
