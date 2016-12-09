@@ -100,7 +100,7 @@ public class ParseWSDL {
 		out("Services: ");
 		for (Service service : defs.getServices()) {
 			out("  Service Name: " + service.getName());
-			out("  Service Potrs: ");
+			out("  Service Ports: ");
 			for (Port port : service.getPorts()) {
 				out("    Port Name: " + port.getName());
 				out("    Port Binding: " + port.getBinding().getName());

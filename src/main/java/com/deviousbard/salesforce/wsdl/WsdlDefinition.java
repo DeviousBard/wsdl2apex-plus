@@ -15,9 +15,34 @@ public class WsdlDefinition {
     private List<Service> services = new ArrayList<>();
 
     public WsdlDefinition(Definitions defs) {
-        this.portTypes = defs.getLocalPortTypes();
-        this.bindings = defs.getLocalBindings();
+        this.bindings = defs.getBindings();
+        this.portTypes = defs.getPortTypes();
+        this.services = defs.getServices();
         this.parseWsdl(defs);
+    }
+
+    public List<PortType> getPortTypes() {
+        return portTypes;
+    }
+
+    public void setPortTypes(List<PortType> portTypes) {
+        this.portTypes = portTypes;
+    }
+
+    public List<Binding> getBindings() {
+        return bindings;
+    }
+
+    public void setBindings(List<Binding> bindings) {
+        this.bindings = bindings;
+    }
+
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Service> services) {
+        this.services = services;
     }
 
     public String getNamespace() {
@@ -31,5 +56,13 @@ public class WsdlDefinition {
     private void parseWsdl(Definitions defs) {
         this.setNamespace(defs.getTargetNamespace());
         ApexUtility.addWsdl(this.getNamespace(), this);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("WsdlDefinition[");
+        sb.append("namespace='").append(namespace).append("'; portTypes=").append(portTypes)
+                .append("; bindings=").append(bindings).append("; services=").append(services);
+        return sb.toString();
     }
 }

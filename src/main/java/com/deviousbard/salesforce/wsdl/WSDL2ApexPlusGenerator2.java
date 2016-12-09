@@ -65,6 +65,7 @@ public class WSDL2ApexPlusGenerator2 {
         VelocityContext context = new VelocityContext();
         context.put("schema", sd);
         context.put("wsdl", wd);
+        System.out.println("wd: " + wd);
         FileWriter fw = null;
         try {
             fw = new FileWriter("/tmp/" + ApexUtility.getApexClassFromNamespace(wd.getNamespace()) + ".cls");

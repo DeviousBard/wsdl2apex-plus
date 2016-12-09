@@ -73,6 +73,27 @@ public class ${schema.name} {
     }
 #end
 
+#foreach($service in $wsdl.services)
+#foreach($port in $service.ports)
+    public class ${port.name} {
+        public String endpoint_x = '${port.address.location}';
+        public Map<String, String> inputHttpHeaders_x;
+        public Map<String, String> outpuHttpHeaders_x;
+        public String clientCertName_x;
+        public String clientCert_x;
+        public String clientCertPasswd_x;
+        public Integer timeout_x;
+
+        public ${port.name}() {
+        }
+
+#foreach($portType in $wsdl.portTypes)
+        public ${portType}
+#end
+    }
+#end
+#end
+
     public class SchemaValidationException extends Exception {
     }
 }
