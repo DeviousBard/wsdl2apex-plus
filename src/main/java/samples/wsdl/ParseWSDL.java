@@ -17,6 +17,8 @@ package samples.wsdl;
 import com.predic8.schema.*;
 import com.predic8.wsdl.*;
 
+import javax.xml.namespace.QName;
+
 public class ParseWSDL {
 
 	public static void main(String[] args) {

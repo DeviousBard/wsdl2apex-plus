@@ -1,48 +1,16 @@
 package com.deviousbard.salesforce.wsdl;
 
-import com.predic8.wsdl.Binding;
-import com.predic8.wsdl.Definitions;
-import com.predic8.wsdl.PortType;
-import com.predic8.wsdl.Service;
+import com.predic8.wsdl.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WsdlDefinition {
     private String namespace;
-    private List<PortType> portTypes = new ArrayList<>();
-    private List<Binding> bindings = new ArrayList<>();
-    private List<Service> services = new ArrayList<>();
+    private List<ServiceDefinition> services = new ArrayList<>();
 
     public WsdlDefinition(Definitions defs) {
-        this.bindings = defs.getBindings();
-        this.portTypes = defs.getPortTypes();
-        this.services = defs.getServices();
         this.parseWsdl(defs);
-    }
-
-    public List<PortType> getPortTypes() {
-        return portTypes;
-    }
-
-    public void setPortTypes(List<PortType> portTypes) {
-        this.portTypes = portTypes;
-    }
-
-    public List<Binding> getBindings() {
-        return bindings;
-    }
-
-    public void setBindings(List<Binding> bindings) {
-        this.bindings = bindings;
-    }
-
-    public List<Service> getServices() {
-        return services;
-    }
-
-    public void setServices(List<Service> services) {
-        this.services = services;
     }
 
     public String getNamespace() {
@@ -53,16 +21,32 @@ public class WsdlDefinition {
         this.namespace = namespace;
     }
 
+    public String getApexClassName() {
+        return ApexUtility.getApexClassFromNamespace(this.namespace);
+    }
+
     private void parseWsdl(Definitions defs) {
         this.setNamespace(defs.getTargetNamespace());
         ApexUtility.addWsdl(this.getNamespace(), this);
+        for (Service service : defs.getServices()) {
+            for (Binding binding : defs.getBindings()) {
+                if (binding.getType() != null && binding.getType().getLocalPart().equals(service.getName())) {
+                    for (PortType portType : defs.getPortTypes()) {
+                        if (binding.getPortType().getName().equals(portType.getName())) {
+                            services.add(new ServiceDefinition(binding, portType, defs.getMessages()));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("WsdlDefinition[");
-        sb.append("namespace='").append(namespace).append("'; portTypes=").append(portTypes)
-                .append("; bindings=").append(bindings).append("; services=").append(services);
+        sb.append("namespace='").append(namespace).append("'; services=").append(services)
+        .append("]");
         return sb.toString();
     }
 }

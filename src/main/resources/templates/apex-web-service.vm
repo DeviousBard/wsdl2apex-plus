@@ -84,11 +84,43 @@ public class ${schema.name} {
         public String clientCertPasswd_x;
         public Integer timeout_x;
 
+        // NOTE:  NEED TO ADD HEADER ELEMENTS HERE
+
         public ${port.name}() {
         }
 
 #foreach($portType in $wsdl.portTypes)
-        public ${portType}
+#foreach($operation in $portType.operations)
+        public ${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element ${operation.name}() {
+            ${wsdl.apexClassName}.${operation.input.message.qname.localPart}_element request_x = new ${wsdl.apexClassName}.${operation.input.message.qname.localPart}_element();
+            ${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element response_x;
+
+            // NOTE: NEED TO ADD ALL HIGH-LEVEL ELEMENTS OF REQUEST ELEMENT AS METHOD PARAMETERS AND SET THEM HERE
+
+            Map<String, ${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element> response_map_x = new Map<String, ${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element>();
+            response_map_x.put('response_x', response_x);
+            try {
+                WebServiceCallout.invoke(
+                    this,
+                    request_x,
+                    response_map_x,
+                    new String[] {
+                        endpoint_x,
+                        // NOTE: NEED TO ADD SOAP ACTION HERE
+                        '${operation.input.message.qname.namespaceURI}',
+                        '${operation.input.message.qname.localPart}',
+                        '${operation.output.message.qname.namespaceURI}',
+                        '${operation.output.message.qname.localPart}',
+                        '${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element'
+                    }
+                );
+            } catch (CalloutException ce) {
+                throw ce;
+            }
+            response_x = response_map_x.get('response_x');
+            return response_x;
+    }
+#end
 #end
     }
 #end
