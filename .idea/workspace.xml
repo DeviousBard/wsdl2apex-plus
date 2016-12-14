@@ -4,6 +4,7 @@
     <list default="true" id="ff53c80d-4bb1-4006-bd5d-344d0fd6007c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm" afterPath="$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/apex-web-service.vm" afterPath="$PROJECT_DIR$/src/main/resources/templates/apex-web-service.vm" />
     </list>
     <ignored path="wsdl2apex-plus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,26 +26,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="apex-schema.vm" pinned="false" current-in-tab="false">
+      <file leaf-file-name="apex-schema.vm" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state relative-caret-position="34">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="apex-web-service.vm" pinned="false" current-in-tab="true">
+      <file leaf-file-name="apex-web-service.vm" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/templates/apex-web-service.vm">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="260" lean-forward="false" selection-start-line="0" selection-start-column="260" selection-end-line="0" selection-end-column="260" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state relative-caret-position="34">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -217,8 +214,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/ApexUtility.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/WSDL2ApexPlusGenerator2.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/OperationDefinition.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm" />
         <option value="$PROJECT_DIR$/src/main/resources/templates/apex-web-service.vm" />
+        <option value="$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm" />
       </list>
     </option>
   </component>
@@ -1266,7 +1263,7 @@
       <workItem from="1481111060067" duration="7203000" />
       <workItem from="1481223698894" duration="626000" />
       <workItem from="1481284528869" duration="6641000" />
-      <workItem from="1481544257428" duration="24729000" />
+      <workItem from="1481544257428" duration="24931000" />
     </task>
     <task id="LOCAL-00001" summary="Checkpoint.">
       <created>1479758617650</created>
@@ -1352,11 +1349,18 @@
       <option name="project" value="LOCAL" />
       <updated>1481741062309</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Checkpoint.">
+      <created>1481741157700</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1481741157700</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="127626000" />
+    <option name="totallyTimeSpent" value="127828000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="29" y="12" width="1874" height="1012" extended-state="0" />
@@ -1864,23 +1868,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/apex-web-service.vm">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state relative-caret-position="34">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/apex-web-service.vm">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="260" lean-forward="false" selection-start-line="0" selection-start-column="260" selection-end-line="0" selection-end-column="260" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state relative-caret-position="34">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
