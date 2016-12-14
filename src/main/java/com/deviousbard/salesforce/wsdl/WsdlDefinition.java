@@ -25,6 +25,14 @@ public class WsdlDefinition {
         return ApexUtility.getApexClassFromNamespace(this.namespace);
     }
 
+    public List<ServiceDefinition> getServices() {
+        return services;
+    }
+
+    public void setServices(List<ServiceDefinition> services) {
+        this.services = services;
+    }
+
     private void parseWsdl(Definitions defs) {
         this.setNamespace(defs.getTargetNamespace());
         ApexUtility.addWsdl(this.getNamespace(), this);
@@ -32,8 +40,15 @@ public class WsdlDefinition {
             for (Binding binding : defs.getBindings()) {
                 if (binding.getType() != null && binding.getType().getLocalPart().equals(service.getName())) {
                     for (PortType portType : defs.getPortTypes()) {
+                        Port boundPort = null;
+                        for (Port port : service.getPorts()) {
+                            if (port.getName().equals(binding.getName())) {
+                                boundPort = port;
+                                break;
+                            }
+                        }
                         if (binding.getPortType().getName().equals(portType.getName())) {
-                            services.add(new ServiceDefinition(binding, portType, defs.getMessages()));
+                            services.add(new ServiceDefinition(boundPort, binding, portType));
                             break;
                         }
                     }

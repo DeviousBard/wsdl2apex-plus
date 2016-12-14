@@ -74,30 +74,31 @@ public class ${schema.name} {
 #end
 
 #foreach($service in $wsdl.services)
-#foreach($port in $service.ports)
-    public class ${port.name} {
-        public String endpoint_x = '${port.address.location}';
+    public class ${service.name} {
+        public String endpoint_x = '${service.endPoint}';
         public Map<String, String> inputHttpHeaders_x;
-        public Map<String, String> outpuHttpHeaders_x;
+        public Map<String, String> outputHttpHeaders_x;
         public String clientCertName_x;
         public String clientCert_x;
         public String clientCertPasswd_x;
         public Integer timeout_x;
+#foreach($operation in $service.operations)
+        public ${operation.inputHeaderTypeNamespace}.${operation.inputHeaderType} ${operation.inputHeaderName};
+        private String ${operation.inputHeaderName}_hns = '${operation.inputHeaderName}=${operation.inputHeaderNamespace}';
+        private String[] ns_map_type_info = new String[] {#foreach($namespace in $ApexUtility.getApexClassNamespaces())'${namespace}','${ApexUtility.getApexClassFromNamespace($namespace)}'#if($foreach.hasNext),#end#end};
+#end
 
-        // NOTE:  NEED TO ADD HEADER ELEMENTS HERE
-
-        public ${port.name}() {
+        public ${service.name}() {
         }
 
-#foreach($portType in $wsdl.portTypes)
-#foreach($operation in $portType.operations)
-        public ${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element ${operation.name}() {
-            ${wsdl.apexClassName}.${operation.input.message.qname.localPart}_element request_x = new ${wsdl.apexClassName}.${operation.input.message.qname.localPart}_element();
-            ${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element response_x;
-
-            // NOTE: NEED TO ADD ALL HIGH-LEVEL ELEMENTS OF REQUEST ELEMENT AS METHOD PARAMETERS AND SET THEM HERE
-
-            Map<String, ${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element> response_map_x = new Map<String, ${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element>();
+#foreach($operation in $service.operations)
+        public ${wsdl.apexClassName}.${operation.outputMessageName}_element ${operation.name}(#foreach($elementName in $operation.inputParameterElementNames)${operation.getInputParameterElementValue($elementName)}#if($foreach.hasNext), #end#end) {
+            ${wsdl.apexClassName}.${operation.inputMessageName}_element request_x = new ${wsdl.apexClassName}.${operation.inputMessageName}_element();
+            ${wsdl.apexClassName}.${operation.outputMessageName}_element response_x;
+#foreach($elementName in $operation.inputParameterElementNames)
+            request_x.${elementName} = ${elementName};
+#end
+            Map<String, ${wsdl.apexClassName}.${operation.outputMessageName}_element> response_map_x = new Map<String, ${wsdl.apexClassName}.${operation.outputMessageName}_element>();
             response_map_x.put('response_x', response_x);
             try {
                 WebServiceCallout.invoke(
@@ -106,12 +107,12 @@ public class ${schema.name} {
                     response_map_x,
                     new String[] {
                         endpoint_x,
-                        // NOTE: NEED TO ADD SOAP ACTION HERE
-                        '${operation.input.message.qname.namespaceURI}',
-                        '${operation.input.message.qname.localPart}',
-                        '${operation.output.message.qname.namespaceURI}',
-                        '${operation.output.message.qname.localPart}',
-                        '${wsdl.apexClassName}.${operation.output.message.qname.localPart}_element'
+                        '${operation.soapAction}',
+                        '${operation.inputMessageNamespace}',
+                        '${operation.inputMessageName}',
+                        '${operation.outputMessageNamespace}',
+                        '${operation.outputMessageName}',
+                        '${wsdl.apexClassName}.${operation.outputMessageName}_element'
                     }
                 );
             } catch (CalloutException ce) {
@@ -119,9 +120,7 @@ public class ${schema.name} {
             }
             response_x = response_map_x.get('response_x');
             return response_x;
-    }
-#end
-#end
+        }
     }
 #end
 #end

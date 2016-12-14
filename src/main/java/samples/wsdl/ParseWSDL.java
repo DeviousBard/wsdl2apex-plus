@@ -14,10 +14,8 @@
 
 package samples.wsdl;
 
-import com.predic8.schema.*;
+import com.predic8.schema.Schema;
 import com.predic8.wsdl.*;
-
-import javax.xml.namespace.QName;
 
 public class ParseWSDL {
 
@@ -47,6 +45,8 @@ public class ParseWSDL {
 			out("  Message Parts: ");
 			for (Part part : msg.getParts()) {
 				out("    Part Name: " + part.getName());
+				out("    Part Element PN: " + part.getElementPN());
+				out("    Part Type PN: " + part.getTypePN());
 				out("    Part Element: " + ((part.getElement() != null) ? part.getElement() : "not available!"));
 				out("    Part Type: " + ((part.getType() != null) ? part.getType() : "not available!" ));
 				out("");
@@ -93,6 +93,22 @@ public class ParseWSDL {
 				if(bnd.getBinding() instanceof AbstractSOAPBinding) {
 					out("    Operation SoapAction: " + bop.getOperation().getSoapAction());
 					out("    SOAP Body Use: " + bop.getInput().getBindingElements().get(0).getUse());
+				}
+				BindingInput bindingInput = bop.getInput();
+				BindingOutput bindingOutput = bop.getOutput();
+				for (BindingElement be : bindingInput.getBindingElements()) {
+					if (be instanceof AbstractSOAPBody) {
+						out("    BindingInput SOAP Body Element: " + ((AbstractSOAPBody)be).getParts());
+					} if (be instanceof AbstractSOAPHeader)  {
+						out("    BindingInput SOAP Header Element: " + ((AbstractSOAPHeader)be).getPart());
+					}
+				}
+				for (BindingElement be : bindingOutput.getBindingElements()) {
+					if (be instanceof AbstractSOAPBody) {
+						out("    BindingOutput SOAP Body Element: " + ((AbstractSOAPBody)be).getParts());
+					} if (be instanceof AbstractSOAPHeader)  {
+						out("    BindingOutput SOAP Header Element: " + ((AbstractSOAPHeader)be).getPart());
+					}
 				}
 			}
 			out("");

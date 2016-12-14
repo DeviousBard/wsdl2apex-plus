@@ -2,6 +2,7 @@ package com.deviousbard.salesforce.wsdl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ApexUtility {
 
@@ -79,4 +80,6 @@ public class ApexUtility {
     public static String getApexClassFromNamespace(String namespace) {
         return apexClassNameMap.get(namespace);
     }
+
+    public static Set<String> getApexClassNamespaces() { return apexClassNameMap.keySet(); }
 }
