@@ -7,11 +7,32 @@ public class ${schema.name} {
     public class ${type.name} {
 #foreach($element in $type.elements)
 #if($element.baseType)
+#if($element.required)
+        public ${element.apexType} ${element.name} {
+            get {
+                if (${element.name} == null || String.valueOf(${element.name}) == '') {
+                    throw new ${schema.name}.SchemaValidationException('Element "${element.name}" is required.');
+                }
+                return ${element.name};
+            }
+            set;
+        }
+#else
         public ${element.apexType} ${element.name};
+#end
 #end
 #if($element.simpleType)
         public ${element.simpleTypeApexType} ${element.name} {
+#if($element.required)
+            get {
+                if (${element.name} == null || String.valueOf(${element.name}) == '') {
+                    throw new ${schema.name}.SchemaValidationException('Element "${element.name}" is required.');
+                }
+                return ${element.name};
+            }
+#else
             get;
+#end
             set {
                 new ${element.apexType}().validate(value, '${element.name}');
                 ${element.name} = value;

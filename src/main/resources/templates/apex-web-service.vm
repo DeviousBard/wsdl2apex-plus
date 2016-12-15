@@ -7,16 +7,36 @@ public class ${schema.name} {
     public class ${type.name} {
 #foreach($element in $type.elements)
 #if($element.baseType)
-        public ${element.apexType} ${element.name};
+#if($element.required)
+    public ${element.apexType} ${element.name} {
+        get {
+            if (${element.name} == null || String.valueOf(${element.name}) == '') {
+                throw new ${schema.name}.SchemaValidationException('Element "${element.name}" is required.');
+            }
+            return ${element.name};
+        }
+        set;
+    }
+#else
+    public ${element.apexType} ${element.name};
+#end
 #end
 #if($element.simpleType)
-        public ${element.simpleTypeApexType} ${element.name} {
-            get;
-            set {
-                new ${element.apexType}().validate(value, '${element.name}');
-                ${element.name} = value;
+#if($element.required)
+        get {
+            if (${element.name} == null  || String.valueOf(${element.name}) == '') {
+                throw new ${schema.name}.SchemaValidationException('Element "${element.name}" is required.');
             }
+            return ${element.name};
         }
+#else
+        get;
+#end
+        set {
+            new ${element.apexType}().validate(value, '${element.name}');
+            ${element.name} = value;
+        }
+    }
 #end
 #if($element.complexType)
         public ${element.apexType}#if($element.multiOccurring)[]#end ${element.name};
@@ -91,8 +111,8 @@ public class ${schema.name} {
 
         public ${service.name}() {
         }
-
 #foreach($operation in $service.operations)
+
         // Web Service Operation: ${operation.name}
         public ${wsdl.apexClassName}.${operation.outputMessageName}_element ${operation.name}(#foreach($elementName in $operation.inputParameterElementNames)${operation.getInputParameterElementValue($elementName)}#if($foreach.hasNext), #end#end) {
             ${wsdl.apexClassName}.${operation.inputMessageName}_element request_x = new ${wsdl.apexClassName}.${operation.inputMessageName}_element();
@@ -123,8 +143,8 @@ public class ${schema.name} {
             response_x = response_map_x.get('response_x');
             return response_x;
         }
-    }
 #end
+    }
 #end
 
     public class SchemaValidationException extends Exception {
