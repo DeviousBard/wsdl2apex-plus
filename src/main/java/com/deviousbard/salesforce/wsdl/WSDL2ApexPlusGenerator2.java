@@ -23,6 +23,10 @@ public class WSDL2ApexPlusGenerator2 {
     private VelocityEngine ve = new VelocityEngine();
     private Template apexSchemaTemplate;
     private Template apexWebServiceTemplate;
+    private String clientCertName;
+    private boolean wsSecurity;
+    private boolean environmentSpecificEndPoint;
+    private String timeout;
 
     private void generateApex(String wsdlFile) {
         initializeTemplateEngine();
@@ -47,7 +51,7 @@ public class WSDL2ApexPlusGenerator2 {
         for (String key : wsdlMap.keySet()) {
             System.out.print("WSDL Definition:\n" + key + " - " + wsdlMap.get(key) + "\n\n");
             SchemaDefinition sd = new SchemaDefinition(schemaMap.get(key));
-            WsdlDefinition wd = new WsdlDefinition(wsdlMap.get(key));
+            WsdlDefinition wd = new WsdlDefinition(wsdlMap.get(key), clientCertName, wsSecurity, environmentSpecificEndPoint, timeout);
             this.applyApexWebServiceTemplate(sd, wd);
         }
     }
@@ -116,7 +120,7 @@ public class WSDL2ApexPlusGenerator2 {
                 String defaultClassName = fileName.replace('.', '_') + "_WS";
                 System.out.print("Web Service Class Name for Target Namespace \"" + defs.getTargetNamespace() + "\" [" + defaultClassName + "]: ");
                 String className = br.readLine();
-                if (className == null || className.equals("")) {
+                if (className == null || className.trim().equals("")) {
                     className = defaultClassName;
                 }
                 if (defs.getTargetNamespace() != null && !(defs.getTargetNamespace().equals(""))) {
@@ -132,7 +136,7 @@ public class WSDL2ApexPlusGenerator2 {
                     String defaultClassName = fileName.substring(fileName.lastIndexOf("/") + 1, index) + "_XSD";
                     System.out.print("Schema Class Name for Target Namespace \"" + schema.getTargetNamespace() + "\" [" + defaultClassName + "]: ");
                     String className = br.readLine();
-                    if (className == null || className.equals("")) {
+                    if (className == null || className.trim().equals("")) {
                         className = defaultClassName;
                     }
                     if (schema.getTargetNamespace() != null && !(schema.getTargetNamespace().equals(""))) {
@@ -140,6 +144,21 @@ public class WSDL2ApexPlusGenerator2 {
                     }
                 }
             }
+            System.out.print("Client Certificate Name []: ");
+            this.clientCertName = br.readLine();
+
+            System.out.print("Use WS-Security (Y/N) [N]: ");
+            String wsSecurityAnswer = br.readLine();
+            this.wsSecurity = (wsSecurityAnswer != null && wsSecurityAnswer.toLowerCase().equals("y"));
+
+            System.out.print("Use Environment Specific End-Points (Y/N) [N]: ");
+            String environmentSpecificEndPointAnswer = br.readLine();
+            this.environmentSpecificEndPoint = (environmentSpecificEndPointAnswer != null && environmentSpecificEndPointAnswer.toLowerCase().equals("y"));
+
+            System.out.print("Web Service Timeout (in ms) (1 - 120000) [10000]: ");
+            String timeoutAnswer = br.readLine();
+            this.timeout = (timeoutAnswer == null || timeoutAnswer.trim().equals("") ? "10000" : "" + Integer.parseInt(timeoutAnswer));
+
         } catch (Exception e) {
             System.err.print("Exception: " + e.getMessage());
             e.printStackTrace(System.err);

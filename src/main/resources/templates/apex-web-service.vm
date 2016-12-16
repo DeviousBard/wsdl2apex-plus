@@ -99,17 +99,30 @@ public class ${schema.name} {
         public String endpoint_x = '${service.endPoint}';
         public Map<String, String> inputHttpHeaders_x;
         public Map<String, String> outputHttpHeaders_x;
-        public String clientCertName_x;
+        public String clientCertName_x#if($wsdl.clientCertName != '') = '${wsdl.clientCertName}'#end;
         public String clientCert_x;
         public String clientCertPasswd_x;
-        public Integer timeout_x;
+        public Integer timeout_x#if($wsdl.timeout != '') = ${wsdl.timeout}#end;
 #foreach($operation in $service.operations)
         public ${operation.inputHeaderTypeNamespace}.${operation.inputHeaderType} ${operation.inputHeaderName};
         private String ${operation.inputHeaderName}_hns = '${operation.inputHeaderName}=${operation.inputHeaderNamespace}';
-        private String[] ns_map_type_info = new String[] {#foreach($namespace in $ApexUtility.getApexClassNamespaces())'${namespace}','${ApexUtility.getApexClassFromNamespace($namespace)}'#if($foreach.hasNext),#end#end};
+#break#end
+#if($wsdl.wsSecurity)
+        public WS_Security.SecurityHeaderType Security;
+        public String Security_hns = 'wsse:Security=http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
 #end
+        private String[] ns_map_type_info = new String[] {#foreach($namespace in $ApexUtility.getApexClassNamespaces())'${namespace}','${ApexUtility.getApexClassFromNamespace($namespace)}'#if($foreach.hasNext),#end#end};
 
+        // Web Service Constructor: ${service.name}
         public ${service.name}() {
+#if($wsdl.environmentSpecificEndPoint)
+            WebServiceEndPoint__mdt webServiceEndPoint = [SELECT End_Point_URL__c FROM WebServiceEndPoint__mdt WHERE QualifiedApiName = '${schema.name}' LIMIT 1];
+            endpoint_x = webServiceEndPoint.End_Point_URL__c;
+#end
+#if($wsdl.wsSecurity)
+            WebServiceCredentials__mdt webServiceCredentials = [SELECT User_ID__c, Password__c FROM WebServiceCredentials__mdt WHERE QualifiedApiName = '${schema.name}' LIMIT 1];
+            Security = new WS_Security.SecurityHeaderType(webServiceCredentials.User_ID__c, webServiceCredentials.Password__c);
+#end
         }
 #foreach($operation in $service.operations)
 

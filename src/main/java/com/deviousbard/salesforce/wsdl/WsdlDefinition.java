@@ -8,8 +8,16 @@ import java.util.List;
 public class WsdlDefinition {
     private String namespace;
     private List<ServiceDefinition> services = new ArrayList<>();
+    private String clientCertName;
+    private boolean wsSecurity;
+    private boolean environmentSpecificEndPoint;
+    private String timeout;
 
-    public WsdlDefinition(Definitions defs) {
+    public WsdlDefinition(Definitions defs, String clientCertName, boolean wsSecurity,  boolean environmentSpecificEndPoint, String timeout) {
+        this.clientCertName = clientCertName;
+        this.wsSecurity = wsSecurity;
+        this.environmentSpecificEndPoint = environmentSpecificEndPoint;
+        this.timeout = timeout;
         this.parseWsdl(defs);
     }
 
@@ -23,6 +31,38 @@ public class WsdlDefinition {
 
     public String getApexClassName() {
         return ApexUtility.getApexClassFromNamespace(this.namespace);
+    }
+
+    public String getClientCertName() {
+        return clientCertName;
+    }
+
+    public void setClientCertName(String clientCertName) {
+        this.clientCertName = clientCertName;
+    }
+
+    public boolean isWsSecurity() {
+        return wsSecurity;
+    }
+
+    public void setWsSecurity(boolean wsSecurity) {
+        this.wsSecurity = wsSecurity;
+    }
+
+    public boolean isEnvironmentSpecificEndPoint() {
+        return environmentSpecificEndPoint;
+    }
+
+    public void setEnvironmentSpecificEndPoint(boolean environmentSpecificEndPoint) {
+        this.environmentSpecificEndPoint = environmentSpecificEndPoint;
+    }
+
+    public String getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(String timeout) {
+        this.timeout = timeout;
     }
 
     public List<ServiceDefinition> getServices() {
