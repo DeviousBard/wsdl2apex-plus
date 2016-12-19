@@ -7,11 +7,11 @@ public class ${schema.name} {
     public class ${type.name} {
 #foreach($element in $type.elements)
 #if($element.baseType)
-#if($element.required)
+#if($element.required && not($element.nilable))
     public ${element.apexType} ${element.name} {
         get {
             if (${element.name} == null || String.valueOf(${element.name}) == '') {
-                throw new ${schema.name}.SchemaValidationException('Element "${element.name}" is required.');
+                throw new ${schema.name}.SchemaValidationException('Element "${element.name}" is required and may not be NULL.');
             }
             return ${element.name};
         }
@@ -65,27 +65,27 @@ public class ${schema.name} {
 #end
         public void validate(${type.apexType} value, String elementName) {
 #if($type.minLengthRestricted)
-            if (value.length() < ${type.minLength}) {
+            if (value != null && value.length() < ${type.minLength}) {
                 throw new ${schema.name}.SchemaValidationException('Element ' + '"' + elementName + '": '+ '"' + value + '" is too short for "${type.name}". The minimum length is ${type.minLength}');
             }
 #end
 #if($type.maxLengthRestricted)
-            if (value.length() > ${type.maxLength}) {
+            if (value != null && value.length() > ${type.maxLength}) {
                 throw new ${schema.name}.SchemaValidationException('Element ' + '"' + elementName + '": '+ '"' + value + '" is too long for "${type.name}". The maximum length is ${type.maxLength}');
             }
 #end
 #if($type.lengthRestricted)
-            if (value.length() != ${type.length}) {
+            if (value != null && value.length() != ${type.length}) {
                 throw new ${schema.name}.SchemaValidationException('Element ' + '"' + elementName + '": '+ '"' + value + '" length is invalid for "${type.name}". The length must be exactly ${type.length}');
             }
 #end
 #if($type.enumerated)
-            if (!enumerations.contains(value)) {
+            if (value != null && !enumerations.contains(value)) {
                 throw new ${schema.name}.SchemaValidationException('Element ' + '"' + elementName + '": '+ '"' + value + '" is not a valid value for "${type.name}"');
             }
 #end
 #if($type.regexPatternRestricted)
-            if (!Pattern.matches('${type.regexPattern}', value)) {
+            if (value != null && !Pattern.matches('${type.regexPattern}', value)) {
                 throw new ${schema.name}.SchemaValidationException('Element ' + '"' + elementName + '": '+ '"' + value + '" for "${type.name}" does not match the pattern "${type.regexPattern}"');
             }
 #end
