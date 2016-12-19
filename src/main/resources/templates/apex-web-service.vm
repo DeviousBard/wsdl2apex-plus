@@ -10,7 +10,7 @@ public class ${schema.name} {
 #if($element.required && not($element.nilable))
     public ${element.apexType} ${element.name} {
         get {
-            if (${element.name} == null || String.valueOf(${element.name}) == '') {
+            if (${element.name} == null) {
                 throw new ${schema.name}.SchemaValidationException('Element "${element.name}" is required and may not be NULL.');
             }
             return ${element.name};
@@ -22,9 +22,9 @@ public class ${schema.name} {
 #end
 #end
 #if($element.simpleType)
-#if($element.required)
+#if($element.required && not($element.nilable))
         get {
-            if (${element.name} == null  || String.valueOf(${element.name}) == '') {
+            if (${element.name} == null) {
                 throw new ${schema.name}.SchemaValidationException('Element "${element.name}" is required.');
             }
             return ${element.name};
