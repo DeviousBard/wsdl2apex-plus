@@ -8,7 +8,7 @@ public class ${schema.name} {
 #foreach($element in $type.elements)
 #if($element.baseType)
 #if($element.required)
-        public ${element.apexType} ${element.name} {
+        public ${element.apexType}#if($element.multiOccurring)[]#end ${element.name} {
             get {
                 if (${element.name} == null) {
                     throw new ${schema.name}.SchemaValidationException('Element "${element.name}" is required.');
@@ -18,11 +18,11 @@ public class ${schema.name} {
             set;
         }
 #else
-        public ${element.apexType} ${element.name};
+        public ${element.apexType}#if($element.multiOccurring)[]#end ${element.name};
 #end
 #end
 #if($element.simpleType)
-        public ${element.simpleTypeApexType} ${element.name} {
+        public ${element.simpleTypeApexType}#if($element.multiOccurring)[]#end ${element.name} {
 #if($element.required && not($element.nilable))
             get {
                 if (${element.name} == null) {
@@ -34,8 +34,17 @@ public class ${schema.name} {
             get;
 #end
             set {
+#if($element.multiOccurring)
+                if (value != null) {
+                    for (${element.simpleTypeApexType} elementValue : value) {
+                        new ${element.apexType}().validate(elementValue, '${element.name}');
+                    }
+                }
+                ${element.name} = value;
+#else
                 new ${element.apexType}().validate(value, '${element.name}');
                 ${element.name} = value;
+#end
             }
         }
 #end

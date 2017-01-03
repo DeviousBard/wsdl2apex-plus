@@ -27,6 +27,7 @@ public class WSDL2ApexPlusGenerator {
     private boolean wsSecurity;
     private boolean environmentSpecificEndPoint;
     private String timeout;
+    private boolean failOnFirstError;
 
     private void generateApex(String wsdlFile) {
         initializeTemplateEngine();
@@ -158,6 +159,10 @@ public class WSDL2ApexPlusGenerator {
             System.out.print("Web Service Timeout (in ms) (1 - 120000) [10000]: ");
             String timeoutAnswer = br.readLine();
             this.timeout = (timeoutAnswer == null || timeoutAnswer.trim().equals("") ? "10000" : "" + Integer.parseInt(timeoutAnswer));
+
+            System.out.print("Fail on first error or accumulate all errors (F or A) [F]: ");
+            String failOnFirstErrorAnswer = br.readLine();
+            this.failOnFirstError = ((failOnFirstErrorAnswer == null || failOnFirstErrorAnswer.trim().equals("") || failOnFirstErrorAnswer.trim().toLowerCase().equals("f")) || (!failOnFirstErrorAnswer.trim().toLowerCase().equals("a")));
 
         } catch (Exception e) {
             System.err.print("Exception: " + e.getMessage());
