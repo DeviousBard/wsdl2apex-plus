@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ff53c80d-4bb1-4006-bd5d-344d0fd6007c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/WSDL2ApexPlusGenerator.java" afterPath="$PROJECT_DIR$/src/main/java/com/deviousbard/salesforce/wsdl/WSDL2ApexPlusGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm" afterPath="$PROJECT_DIR$/src/main/resources/templates/apex-schema.vm" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/templates/apex-web-service.vm" afterPath="$PROJECT_DIR$/src/main/resources/templates/apex-web-service.vm" />
     </list>
     <ignored path="wsdl2apex-plus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1081,7 +1078,7 @@
       <workItem from="1482260008285" duration="864000" />
       <workItem from="1482322967762" duration="5754000" />
       <workItem from="1482931124647" duration="2677000" />
-      <workItem from="1483455425869" duration="4435000" />
+      <workItem from="1483455425869" duration="4464000" />
     </task>
     <task id="LOCAL-00001" summary="Checkpoint.">
       <created>1479758617650</created>
@@ -1244,11 +1241,18 @@
       <option name="project" value="LOCAL" />
       <updated>1482349225205</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Fixed bug with multiply occurring elements.">
+      <created>1483470195932</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1483470195932</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="159627000" />
+    <option name="totallyTimeSpent" value="159656000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="3" y="12" width="1874" height="1003" extended-state="0" />
@@ -1334,7 +1338,8 @@
     <MESSAGE value="Version 0.4" />
     <MESSAGE value="Removed references to the old &quot;WSDL2ApexPlus&quot; class and renamed &quot;WSDL2ApexPlus2&quot; class to be the new &quot;WSDL2ApexPlus&quot; class." />
     <MESSAGE value="Added the &quot;additional-salesforce-artifacts&quot; directory." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the &quot;additional-salesforce-artifacts&quot; directory." />
+    <MESSAGE value="Fixed bug with multiply occurring elements." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug with multiply occurring elements." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
